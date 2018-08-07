@@ -192,8 +192,8 @@
       Students can access the instructions at
       <a href="{{ studentUrl }}" target="_blank">{{ studentUrl }}</a>, after entering the course code and the following Access Code:
     </p>
-
-    <input type="text" class="form-control" [class.text-success]="copied" [value]=model.accessCode disabled #accessCode>
-
+    <p class="lead text-center">
+      <strong>{{ model.accessCode }}</strong>
+    </p>
   </div>
 </ng-template>
