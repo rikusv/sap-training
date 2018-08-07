@@ -1,0 +1,199 @@
+<nav class="navbar navbar-light bg-light sticky-top">
+  <span class="navbar-brand mb-0 h1">Training Course Instructions</span>
+  <span>
+    <button *ngIf="state.ready" class="btn btn-light" type="submit" (click)="saveCourseDelivery()">Save</button>
+    <button *ngIf="state.ready" class="btn btn-light" type="submit" (click)="openModal(share)">Share</button>
+  </span>
+</nav>
+
+<div class="container-fluid">
+
+  <form *ngIf="!state.ready" novalidate class="needs-validation">
+
+    <ngb-alert type="primary" [dismissible]="false">
+      Enter the details below to create or retrieve instructions for students.
+    </ngb-alert>
+
+    <div class="row">
+      <div class="col-sm mb-3">
+        <input type="text" required class="form-control" id="course" name="course" placeholder="Course" [(ngModel)]="model.course" #course="ngModel">
+      </div>
+      <div class="col-sm mb-3">
+        <input type="email" required email class="form-control" id="email" name="email" placeholder="Your Email" [(ngModel)]="model.email" #email="ngModel">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm mb-3">
+        <button class="btn btn-outline-primary btn-block" type="submit" (click)="createCourseDelivery(email, course)">Create</button>
+      </div>
+      <div class="col-sm mb-3">
+        <div class="input-group">
+          <input type="text" class="form-control" autocomplete="off" id="accessCode" name="accessCode" placeholder="Access Code" [(ngModel)]="model.accessCode" #accessCode="ngModel">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary" type="submit" (click)="fetchCourseDelivery(email, course)">Fetch</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ngb-alert *ngIf="state.incompleteAccessData && (email.invalid || course.invalid)" type="danger" [dismissible]="false">
+      Please complete the form and correct errors.
+    </ngb-alert>
+
+    <ngb-alert *ngIf="state.missingAccessCode && accessCode.value == ''" type="danger" [dismissible]="false">
+      Please enter the <strong>Access Code</strong> to retrieve a saved record.
+    </ngb-alert>
+
+    <ngb-alert *ngIf="state.noRecordFound" type="danger" [dismissible]="false">
+      No record found with for course <strong>{{ notFoundModel.course }}</strong> with access code <strong>{{ notFoundModel.accessCode }}</strong>.
+    </ngb-alert>
+
+    <ngb-alert *ngIf="state.conflictingRecord" type="danger" [dismissible]="false">
+      This course delivery record exists, but has been created with a different email address.
+    </ngb-alert>
+
+    <ngb-alert *ngIf="state.accessCodeRequired && !model.accessCode" type="danger" [dismissible]="false">
+      Please enter an <strong>Access Code</strong>.
+    </ngb-alert>
+
+    <div *ngIf="email.invalid && (email.dirty || email.touched)">
+      <ngb-alert *ngIf="email.errors.required" type="danger" [dismissible]="false">
+        <strong>Email</strong> address is required.
+      </ngb-alert>
+      <ngb-alert *ngIf="email.errors.email" type="danger" [dismissible]="false">
+        Please enter a valid <strong>Email</strong> address.
+      </ngb-alert>
+    </div>
+    <div *ngIf="course.invalid && (course.dirty || course.touched)">
+      <ngb-alert *ngIf="course.errors.required" type="danger" [dismissible]="false">
+        <strong>Course</strong> is required.
+      </ngb-alert>
+    </div>
+
+  </form>
+
+  <form *ngIf="state.ready" (ngSubmit)="onSubmit()" #form="ngForm" novalidate class="needs-validation">
+
+    <ngb-alert type="primary" [dismissible]="false">
+      <p>
+        You are working on instructions for course <strong>{{ model.course }}</strong>, access code <strong>{{ model.accessCode }}</strong>.
+      </p>
+      <a href="#" class="alert-link" (click)="state.ready = false">Click here to select another record</a>.
+    </ngb-alert>
+
+    <ngb-alert class="fixed-bottom mx-3" *ngIf="state.savedMessage" type="primary" [dismissible]="false">
+      Instructions saved.
+    </ngb-alert>
+
+    <h2>Landscape</h2>
+
+    <div class="form-group">
+      <label for="localUser">Local PC</label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="localUser" name="localUser" placeholder="Username" [(ngModel)]="model.localUser">
+        <input type="text" class="form-control" id="localPassword" name="localPassword" placeholder="Password" [(ngModel)]="model.localPassword">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="localUser">Training Landscape</label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="trainingLandscapeUser" name="trainingLandscapeUser" placeholder="Username" [(ngModel)]="model.trainingLandscapeUser">
+        <input type="text" class="form-control" id="trainingLandscapePassword" name="trainingLandscapePassword" placeholder="Password" [(ngModel)]="model.trainingLandscapePassword">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="localUser">Remote Desktop Connection</label>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" id="remoteServer" name="remoteServer" placeholder="Server" [(ngModel)]="model.remoteServer">
+      </div>
+      <div class="input-group">
+        <input type="text" class="form-control" id="remoteServerUser" name="remoteServerUser" placeholder="User" [(ngModel)]="model.remoteServerUser">
+        <input type="text" class="form-control" id="remoteServerPassword" name="remoteServerPassword" placeholder="User" [(ngModel)]="model.remoteServerPassword">
+      </div>
+    </div>
+
+    <h2>Systems</h2>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="systemType">Add</label>
+      </div>
+      <div class="input-group-append" id="systemType">
+        <button class="btn btn-outline-primary" type="button" (click)="addSystem('sidClient')">SID:Client</button>
+        <button class="btn btn-outline-primary" type="button" (click)="addSystem('hostInstance')">Host:Instance</button>
+        <button class="btn btn-outline-primary" type="button" (click)="addSystem('url')">URL</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6" *ngFor="let system of model.systems; let i=index">
+        <div class="card mb-3 mt-3">
+          <div class="card-header">
+            <ng-container *ngIf="system.type === 'sidClient'">
+              {{ system.sid && system.client ? system.sid + ':' + system.client : 'Maintain SID and Client'}}
+            </ng-container>
+            <ng-container *ngIf="system.type === 'hostInstance'">
+              {{ system.host && system.instance ? system.host + ':' + system.instance : 'Maintain Host and Instance'}}
+            </ng-container>
+            <ng-container *ngIf="system.type === 'url'">
+              {{ system.url ? system.url : 'Maintain URL' }}
+            </ng-container>
+          </div>
+          <div class="card-body">
+
+            <ng-container *ngIf="system.type === 'sidClient'">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" [name]="'sid' + i" placeholder="SID" [(ngModel)]="system.sid">
+                <input type="text" class="form-control" [name]="'client' + i" placeholder="Client" [(ngModel)]="system.client">
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="system.type === 'hostInstance'">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" [name]="'host' + i" placeholder="Host" [(ngModel)]="system.host">
+                <input type="text" class="form-control" [name]="'instance' + i" placeholder="Instance" [(ngModel)]="system.instance">
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="system.type === 'url'">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" [name]="'url' + i" placeholder="URL" [(ngModel)]="system.url">
+              </div>
+            </ng-container>
+
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" [name]="'user' + i" placeholder="User" [(ngModel)]="system.user">
+              <input type="text" class="form-control" [name]="'password' + i" placeholder="Password" [(ngModel)]="system.password">
+            </div>
+
+            <button class="btn btn-outline-danger" type="button" (click)="removeSystem(i)">Remove</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+<ng-template #share let-close="close">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Share</h4>
+    <button type="button" class="close" (click)="close();this.copied=false">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      Students can access the instructions at
+      <a href="{{ studentUrl }}" target="_blank">{{ studentUrl }}</a>, after entering the course code and the following Access Code:
+    </p>
+
+    <input type="text" class="form-control" [class.text-success]="copied" [value]=model.accessCode disabled #accessCode>
+
+  </div>
+</ng-template>

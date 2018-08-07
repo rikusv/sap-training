@@ -1,0 +1,99 @@
+<nav class="navbar navbar-light bg-light sticky-top">
+
+  <span class="navbar-brand mb-0 h1">SAP Training</span>
+
+  <form class="d-print-none needs-validation" novalidate>
+    <div class="input-group">
+      <input type="text" required class="form-control" id="course" name="course" placeholder="Course" [(ngModel)]="course" #courseInput="ngModel">
+      <input type="text" required class="form-control" autocomplete="off" id="accessCode" name="accessCode" placeholder="Access Code" [(ngModel)]="accessCode" #accessCodeInput="ngModel">
+      <div class="input-group-append">
+        <button class="btn btn-outline-primary" type="submit" (click)="findCourseDelivery(courseInput, accessCodeInput)">Submit</button>
+      </div>
+    </div>
+  </form>
+
+</nav>
+
+<div class="container-fluid">
+
+  <ng-container *ngIf="courseInput.invalid && (courseInput.dirty || courseInput.touched)">
+    <ngb-alert *ngIf="courseInput.errors.required" type="warning" [dismissible]="false">
+      <strong>Course</strong> code is required.
+    </ngb-alert>
+  </ng-container>
+  <ng-container *ngIf="accessCodeInput.invalid && (accessCodeInput.dirty || accessCodeInput.touched)">
+    <ngb-alert *ngIf="accessCodeInput.errors.required" type="warning" [dismissible]="false">
+      <strong>Access Code</strong> is required.
+    </ngb-alert>
+  </ng-container>
+
+  <ngb-alert *ngIf="notFound" type="warning" [dismissible]="false">
+    No course record found.
+  </ngb-alert>
+
+  <ng-container *ngIf="data">
+
+    <h1>System Access</h1>
+
+    <div class="alert alert-primary" role="alert">
+      In these instructions and the course exercises, ## represents the number issued to you by your instructor.
+    </div>
+
+    <h3>Training Landscape</h3>
+
+    <ol>
+      <li *ngIf="data.localUser || localPassword">
+        Log on to the local PC with user <strong>{{ data.localUser }}</strong>, password <strong>{{ data.localPassword }}</strong>.
+      </li>
+      <li>
+        Launch <a href="https://access.sap.com" target="_blank">https://access.sap.com</a> with Google Chrome or Internet Explorer.
+      </li>
+      <li>
+        Select a region.
+      </li>
+      <li>
+        Select <strong>Training Landscape</strong> and log on with user <strong>{{ data.trainingLandscapeUser }}</strong>, password <strong>{{ data.trainingLandscapePassword }}</strong>.
+      </li>
+      <li>
+        Select <strong>Remote Desktop Connection</strong>, then enter server name <strong>{{ data.remoteServer }}</strong>, and log on with user <strong>{{ data.remoteServerUser }}</strong>, password <strong>{{ data.remoteServerPassword }}</strong>. (You may need to change the user using <i>More Choices</i> -> <i>User a different account</i>.)
+      </li>
+    </ol>
+
+    <ng-container *ngIf="data.systems.length">
+
+      <h3>Course Systems</h3>
+
+      <ul>
+        <li *ngFor="let system of data.systems">
+          <ng-container *ngIf="system.type === 'sidClient'">
+            ABAP system <strong>{{ system.sid }}:{{ system.client }}</strong>, user <strong>{{ system.user }}</strong>, password <strong>{{ system.password }}</strong>.
+          </ng-container>
+          <ng-container *ngIf="system.type === 'hostInstance'">
+            HANA host <strong>{{ system.host }}</strong>, instance <strong>{{ system.instance }}</strong>, user <strong>{{ system.user }}</strong>, password <strong>{{ system.password }}</strong>.
+          </ng-container>
+          <ng-container *ngIf="system.type === 'url'">
+            URL <a [href]="system.url" target="_blank">{{ system.url }}</a>, user <strong>{{ system.user }}</strong>, password <strong>{{ system.password }}</strong>.
+          </ng-container>
+        </li>
+      </ul>
+
+    </ng-container>
+
+    <h3>Course Evaluation</h3>
+
+    <div class="alert alert-primary" role="alert">
+      At the end of the course, please complete the online evaluation.
+    </div>
+
+    <ol>
+      <li>
+        Launch <a href="https://survey.education.sap.com" target="_blank">https://survey.education.sap.com</a> with Google Chrome or Internet Explorer.
+      </li>
+      <li>
+        Log on with user <strong>{{ data.trainingLandscapeUser }}</strong>, password <strong>{{ data.trainingLandscapePassword }}</strong>.
+      </li>
+    </ol>
+
+  </ng-container>
+
+</div>

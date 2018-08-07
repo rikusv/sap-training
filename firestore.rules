@@ -1,0 +1,17 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /courseDeliveries/{courseDelivery} {
+    	allow list: if false;
+    	allow create: if ('course' in request.resource.data && 'accessCode' in request.resource.data && 'email' in request.resource.data);
+      allow update: if 'course' in request.resource.data && 'accessCode' in request.resource.data && 'email' in request.resource.data
+                    && request.resource.data.email == resource.data.email;
+      allow get: if true;
+    }
+    match /courseTemplates/{course} {
+    	allow list: if true;
+    	allow create: if 'email' in request.resource.data;
+      allow update: if 'email' in request.resource.data;
+      allow get: if true;
+    }
+  }
+}
