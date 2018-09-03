@@ -32,6 +32,7 @@ export class TrainerComponent implements OnInit {
       remoteServer: '',
       remoteServerUser: 'train-##',
       remoteServerPassword: 'initial',
+      customInstructions: '',
       systems: []
     };
     this.state = {};
@@ -92,6 +93,7 @@ export class TrainerComponent implements OnInit {
         if (courseTemplate) {
           this.model.systems = courseTemplate.systems || [];
           this.model.remoteServer = courseTemplate.remoteServer || '';
+          this.model.customInstructions = courseTemplate.customInstructions || '';
         }
         this.afs.firestore.doc(courseDeliveryPath).set(this.model);
         this.accessModal = this.modalService.open(AccessComponent);
@@ -126,6 +128,7 @@ export class TrainerComponent implements OnInit {
           const courseTemplate = {
             remoteServer: this.model.remoteServer,
             systems: this.model.systems,
+            customInstructions: this.model.customInstructions,
             email: this.model.email
           };
           this.afs.firestore.doc(courseTemplatePath).set(courseTemplate);

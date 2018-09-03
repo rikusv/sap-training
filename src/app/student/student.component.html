@@ -59,6 +59,13 @@
       </li>
     </ol>
 
+    <div class="card mb-3" *ngIf="data.customInstructions && data.customInstructions !== ''">
+      <div class="card-header">
+        Further Instructions
+      </div>
+      <div class="card-body" [innerHTML]="data.customInstructions | markdown"></div>
+    </div>
+
     <ng-container *ngIf="data.systems.length">
 
       <h3>Course Systems</h3>
