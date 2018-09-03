@@ -55,7 +55,7 @@ export class TrainerComponent implements OnInit {
     }, false);
   }
 
-  _generateAccessCode(): string {
+  _generateId(): string {
     function generateRange(from, to): any[] {
       const range = [];
       for (let i = from.charCodeAt(0); i <= to.charCodeAt(0); i++) {
@@ -83,7 +83,7 @@ export class TrainerComponent implements OnInit {
       };
     } else {
       this.model.course = this.model.course.toUpperCase();
-      this.model.accessCode = this._generateAccessCode();
+      this.model.accessCode = this._generateId();
       const courseTemplatePath = `courseTemplates/${this.model.course}`;
       const courseDeliveryPath = `courseDeliveries/${this.model.course}-${this.model.accessCode}`;
       this.afs.firestore.doc(courseTemplatePath).get()
@@ -188,7 +188,8 @@ export class TrainerComponent implements OnInit {
     const system: any = {
       type: type,
       user: this.model.course ? `${this.model.course}-##` : '',
-      password: 'welcome'
+      password: 'welcome',
+      id: this._generateId()
     };
     switch (type) {
       case 'sidClient':
@@ -202,7 +203,15 @@ export class TrainerComponent implements OnInit {
     this.model.systems.unshift(system);
   }
 
-  removeSystem(index: number) {
+  removeSystem(id: string) {
+    let index = null;
+    let i = 0;
+    while (index === null) {
+      if (this.model.systems[i].id === id) {
+        index = i;
+      }
+      i++;
+    }
     this.model.systems.splice(index, 1);
   }
 

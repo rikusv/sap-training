@@ -129,7 +129,7 @@
     </div>
 
     <div class="row">
-      <div class="col-sm-6" *ngFor="let system of model.systems; let i=index">
+      <div class="col-sm-6" *ngFor="let system of model.systems">
         <div class="card mb-3 mt-3">
           <div class="card-header">
             <ng-container *ngIf="system.type === 'sidClient'">
@@ -146,30 +146,30 @@
 
             <ng-container *ngIf="system.type === 'sidClient'">
               <div class="input-group mb-3">
-                <input type="text" class="form-control" [name]="'sid' + i" placeholder="SID" [(ngModel)]="system.sid">
-                <input type="text" class="form-control" [name]="'client' + i" placeholder="Client" [(ngModel)]="system.client">
+                <input type="text" class="form-control" [name]="'sid' + system.id" placeholder="SID" [(ngModel)]="system.sid">
+                <input type="text" class="form-control" [name]="'client' + system.id" placeholder="Client" [(ngModel)]="system.client">
               </div>
             </ng-container>
 
             <ng-container *ngIf="system.type === 'hostInstance'">
               <div class="input-group mb-3">
-                <input type="text" class="form-control" [name]="'host' + i" placeholder="Host" [(ngModel)]="system.host">
-                <input type="text" class="form-control" [name]="'instance' + i" placeholder="Instance" [(ngModel)]="system.instance">
+                <input type="text" class="form-control" [name]="'host' + system.id" placeholder="Host" [(ngModel)]="system.host">
+                <input type="text" class="form-control" [name]="'instance' + system.id" placeholder="Instance" [(ngModel)]="system.instance">
               </div>
             </ng-container>
 
             <ng-container *ngIf="system.type === 'url'">
               <div class="input-group mb-3">
-                <input type="text" class="form-control" [name]="'url' + i" placeholder="URL" [(ngModel)]="system.url">
+                <input type="text" class="form-control" [name]="'url' + system.id" placeholder="URL" [(ngModel)]="system.url">
               </div>
             </ng-container>
 
             <div class="input-group mb-3">
-              <input type="text" class="form-control" [name]="'user' + i" placeholder="User" [(ngModel)]="system.user">
-              <input type="text" class="form-control" [name]="'password' + i" placeholder="Password" [(ngModel)]="system.password">
+              <input type="text" class="form-control" [name]="'user' + system.id" placeholder="User" [(ngModel)]="system.user">
+              <input type="text" class="form-control" [name]="'password' + system.id" placeholder="Password" [(ngModel)]="system.password">
             </div>
 
-            <button class="btn btn-outline-danger" type="button" (click)="removeSystem(i)">Remove</button>
+            <button class="btn btn-outline-danger" type="button" (click)="removeSystem(system.id)">Remove</button>
 
           </div>
         </div>
