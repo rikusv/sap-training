@@ -39,6 +39,13 @@
       In these instructions and the course exercises, ## represents the number issued to you by your instructor.
     </div>
 
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Your number</span>
+      </div>
+      <input [(ngModel)]="studentNumber" type="text" class="form-control" placeholder="##">
+    </div>
+
     <h3>Training Landscape</h3>
 
     <ol>
@@ -52,10 +59,10 @@
         Select a region.
       </li>
       <li>
-        Select <strong>Training Landscape</strong> and log on with user <strong>{{ data.trainingLandscapeUser }}</strong>, password <strong>{{ data.trainingLandscapePassword }}</strong>.
+        Select <strong>Training Landscape</strong> and log on with user <strong>{{ data.trainingLandscapeUser | replaceHashes:studentNumber }}</strong>, password <strong>{{ data.trainingLandscapePassword }}</strong>.
       </li>
       <li>
-        Select <strong>Remote Desktop Connection</strong>, then enter server name <strong>{{ data.remoteServer }}</strong>, and log on with user <strong>{{ data.remoteServerUser }}</strong>, password <strong>{{ data.remoteServerPassword }}</strong>. (You may need to change the user using <i>More Choices</i> -> <i>User a different account</i>.)
+        Select <strong>Remote Desktop Connection</strong>, then enter server name <strong>{{ data.remoteServer }}</strong>, and log on with user <strong>{{ data.remoteServerUser | replaceHashes:studentNumber }}</strong>, password <strong>{{ data.remoteServerPassword }}</strong>. (You may need to change the user using <i>More Choices</i> -> <i>User a different account</i>.)
       </li>
     </ol>
 
@@ -73,13 +80,13 @@
       <ul>
         <li *ngFor="let system of data.systems">
           <ng-container *ngIf="system.type === 'sidClient'">
-            ABAP system <strong>{{ system.sid }}:{{ system.client }}</strong>, user <strong>{{ system.user }}</strong>, password <strong>{{ system.password }}</strong>.
+            ABAP system <strong>{{ system.sid }}:{{ system.client }}</strong>, user <strong>{{ system.user | replaceHashes:studentNumber }}</strong>, password <strong>{{ system.password }}</strong>.
           </ng-container>
           <ng-container *ngIf="system.type === 'hostInstance'">
-            HANA host <strong>{{ system.host }}</strong>, instance <strong>{{ system.instance }}</strong>, user <strong>{{ system.user }}</strong>, password <strong>{{ system.password }}</strong>.
+            HANA host <strong>{{ system.host }}</strong>, instance <strong>{{ system.instance }}</strong>, user <strong>{{ system.user | replaceHashes:studentNumber }}</strong>, password <strong>{{ system.password }}</strong>.
           </ng-container>
           <ng-container *ngIf="system.type === 'url'">
-            URL <a [href]="system.url" target="_blank">{{ system.url }}</a>, user <strong>{{ system.user }}</strong>, password <strong>{{ system.password }}</strong>.
+            URL <a [href]="system.url" target="_blank">{{ system.url }}</a>, user <strong>{{ system.user | replaceHashes:studentNumber }}</strong>, password <strong>{{ system.password }}</strong>.
           </ng-container>
         </li>
       </ul>
@@ -97,7 +104,7 @@
         Launch <a href="https://survey.education.sap.com" target="_blank">https://survey.education.sap.com</a> with Google Chrome or Internet Explorer.
       </li>
       <li>
-        Log on with user <strong>{{ data.trainingLandscapeUser }}</strong>, password <strong>{{ data.trainingLandscapePassword }}</strong>.
+        Log on with user <strong>{{ data.trainingLandscapeUser | replaceHashes:studentNumber }}</strong>, password <strong>{{ data.trainingLandscapePassword }}</strong>.
       </li>
     </ol>
 
