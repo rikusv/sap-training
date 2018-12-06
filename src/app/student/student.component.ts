@@ -13,6 +13,7 @@ export class StudentComponent implements OnInit {
   course: string;
   accessCode: string;
   data: any;
+  messages: string[];
   notFound: boolean;
   private courseDeliveryDoc: AngularFirestoreDocument<any>;
 
@@ -21,6 +22,7 @@ export class StudentComponent implements OnInit {
   ) {
     this.course = '',
     this.accessCode = '';
+    this.messages = [];
   }
 
   ngOnInit() {
@@ -55,6 +57,13 @@ export class StudentComponent implements OnInit {
         }
       });
     }
+  }
+
+  copyToClipboard(event) {
+    event.target.select();
+    this.messages.unshift(`Copied ${event.target.name} ${event.target.value}`);
+    setTimeout(() => this.messages.pop(), 2000);
+    document.execCommand('copy');
   }
 
 }

@@ -59,10 +59,21 @@
         Select a region.
       </li>
       <li>
-        Select <strong>Training Landscape</strong> and log on with user <strong>{{ data.trainingLandscapeUser | replaceHashes:studentNumber }}</strong>, password <strong>{{ data.trainingLandscapePassword }}</strong>.
+        Select <strong>Training Landscape</strong> and log on using username and password
+        <app-credentials (copyToClipboard)="copyToClipboard($event)" [username]="data.trainingLandscapeUser | replaceHashes:studentNumber" [password]="data.trainingLandscapePassword">
+        </app-credentials>
+
       </li>
       <li>
-        Select <strong>Remote Desktop Connection</strong>, then enter server name <strong>{{ data.remoteServer }}</strong>, and log on with user <strong>{{ data.remoteServerUser | replaceHashes:studentNumber }}</strong>, password <strong>{{ data.remoteServerPassword }}</strong>. (You may need to change the user using <i>More Choices</i> -> <i>User a different account</i>.)
+        Select <strong>Remote Desktop Connection</strong>, then enter server name
+        <form class="form-inline"><input name="servername" readonly (click)="copyToClipboard($event)" type="text"  class="form-control" [value]="data.remoteServer">
+        </form>
+        And log on using username and password
+        <app-credentials (copyToClipboard)="copyToClipboard($event)" [username]="data.remoteServerUser | replaceHashes:studentNumber" [password]="data.remoteServerPassword">
+        </app-credentials>
+        <small class="text-muted mx-2">
+          You may need to change the user using <i>More Choices</i> -> <i>User a different account</i>.
+        </small>
       </li>
     </ol>
 
@@ -80,13 +91,19 @@
       <ul>
         <li *ngFor="let system of data.systems">
           <ng-container *ngIf="system.type === 'sidClient'">
-            ABAP system <strong>{{ system.sid }}:{{ system.client }}</strong>, user <strong>{{ system.user | replaceHashes:studentNumber }}</strong>, password <strong>{{ system.password }}</strong>.
+            ABAP system <strong>{{ system.sid }}:{{ system.client }}</strong>, username and password
+            <app-credentials (copyToClipboard)="copyToClipboard($event)" [username]="system.user | replaceHashes:studentNumber" [password]="system.password">
+            </app-credentials>
           </ng-container>
           <ng-container *ngIf="system.type === 'hostInstance'">
-            HANA host <strong>{{ system.host }}</strong>, instance <strong>{{ system.instance }}</strong>, user <strong>{{ system.user | replaceHashes:studentNumber }}</strong>, password <strong>{{ system.password }}</strong>.
+            HANA host <strong>{{ system.host }}</strong>, instance <strong>{{ system.instance }}</strong>, username and password
+            <app-credentials (copyToClipboard)="copyToClipboard($event)" [username]="system.user | replaceHashes:studentNumber" [password]="system.password">
+            </app-credentials>
           </ng-container>
           <ng-container *ngIf="system.type === 'url'">
-            URL <a [href]="system.url" target="_blank">{{ system.url }}</a>, user <strong>{{ system.user | replaceHashes:studentNumber }}</strong>, password <strong>{{ system.password }}</strong>.
+            URL <a [href]="system.url" target="_blank">{{ system.url }}</a>, username and password
+            <app-credentials (copyToClipboard)="copyToClipboard($event)" [username]="system.user | replaceHashes:studentNumber" [password]="system.password">
+            </app-credentials>
           </ng-container>
         </li>
       </ul>
@@ -104,10 +121,16 @@
         Launch <a href="https://survey.education.sap.com" target="_blank">https://survey.education.sap.com</a> with Google Chrome or Internet Explorer.
       </li>
       <li>
-        Log on with user <strong>{{ data.trainingLandscapeUser | replaceHashes:studentNumber }}</strong>, password <strong>{{ data.trainingLandscapePassword }}</strong>.
+        Log on with username and password
+        <app-credentials (copyToClipboard)="copyToClipboard($event)" [username]="data.trainingLandscapeUser | replaceHashes:studentNumber" [password]="data.trainingLandscapePassword">
+        </app-credentials>
       </li>
     </ol>
 
   </ng-container>
+
+  <ngb-alert class="fixed-bottom mx-3" *ngFor="let message of messages | slice:0:1" type="success" [dismissible]="false">
+    {{ message }}
+  </ngb-alert>
 
 </div>

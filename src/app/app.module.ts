@@ -15,6 +15,7 @@ import { StudentComponent } from './student/student.component';
 import { AccessComponent } from './trainer/access/access.component';
 import { MarkdownPipe } from './markdown.pipe';
 import { ReplaceHashesPipe } from './replace-hashes.pipe';
+import { CredentialsComponent } from './student/credentials/credentials.component';
 
 const appRoutes: Routes = [
   { path: 'trainer', component: TrainerComponent},
@@ -28,7 +29,8 @@ const appRoutes: Routes = [
     StudentComponent,
     AccessComponent,
     MarkdownPipe,
-    ReplaceHashesPipe
+    ReplaceHashesPipe,
+    CredentialsComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes,  { enableTracing: true }),
